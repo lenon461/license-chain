@@ -447,20 +447,20 @@ services:
       - GOPATH=/opt/gopath
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - FABRIC_LOGGING_SPEC=info
-      - CORE_PEER_ID=peer0.org5.person
+      - CORE_PEER_ID=cli
       - CORE_PEER_ADDRESS=peer0.org5.person:7051
       - CORE_PEER_LOCALMSPID=Org5MSP
 
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/ca.crt
+ #      - CORE_PEER_TLS_ENABLED=true
+ #      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/server.crt
+ #      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/server.key
+ #      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/ca.crt
       - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/msp
 
-      - CORE_PEER_TLS_CLIENTAUTHREQUIRED=true
-      - CORE_PEER_TLS_CLIENTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/client.crt
-      - CORE_PEER_TLS_CLIENTROOTCAS_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/ca.crt
-      - CORE_PEER_TLS_CLIENTKEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/client.key
+ #      - CORE_PEER_TLS_CLIENTAUTHREQUIRED=true
+ #      - CORE_PEER_TLS_CLIENTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/client.crt
+ #      - CORE_PEER_TLS_CLIENTROOTCAS_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/ca.crt
+ #      - CORE_PEER_TLS_CLIENTKEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/client.key
         # - CORE_CHAINCODE_KEEPALIVE=10
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
