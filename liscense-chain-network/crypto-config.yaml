@@ -1,0 +1,57 @@
+OrdererOrgs:
+  - Name: Orderer
+    Domain: mainorderer.com
+    Specs:
+      - Hostname: orderer
+        SANS:
+          - "localhost"
+PeerOrgs:
+  - Name: Org1_Publisher
+    Domain: PublisherOrg.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+          - "localhost"
+    Users:
+      Count: 1
+
+  - Name: Org2_CrimeChecker
+    Domain: CheckerOrg.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+          - "localhost"
+    Users:
+      Count: 1
+
+  - Name: Org3_Recruiter
+    Domain: RecruiterOrg.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+          - "localhost"
+    Users:
+      Count: 1
+
+  - Name: Org4_HealthChecker
+    Domain: HealthCheckerOrg.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+          - "localhost"
+    Users:
+      Count: 1
+
+  - Name: Org5_Person
+    Domain: PersonOrg.com
+    EnableNodeOUs: true
+    Template:
+      Count: 1
+      SANS:
+          - "localhost"
+    Users:
+      Count: 1

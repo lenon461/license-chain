@@ -1,0 +1,231 @@
+Organizations:
+
+    - &OrdererOrg
+        Name: OrdererOrg
+        ID: OrdererMSP
+        MSPDir: crypto-config/ordererOrganizations/mainorderer.com/msp/
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Writers:
+                Type: Signature
+                Rule: "OR('OrdererMSP.member')"
+            Admins:
+                Type: Signature
+                Rule: "OR('OrdererMSP.admin')"
+
+    - &Org1_Publisher
+        Name: Org1MSP
+        ID: Org1MSP
+        MSPDir: crypto-config/peerOrganizations/PublisherOrg.com/msp/
+        AnchorPeers:
+            - Host: peer0.org1.publisher
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org1MSP.admin', 'Org1MSP.peer', 'Org1MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org1MSP.admin', 'Org1MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org1MSP.admin')"
+    - &Org2_CrimeChecker
+        Name: Org2MSP
+        ID: Org2MSP
+        MSPDir: crypto-config/peerOrganizations/CheckerOrg.com/msp/
+        AnchorPeers:
+            - Host: peer0.org2.crimechecker
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org2MSP.admin', 'Org2MSP.peer', 'Org2MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org2MSP.admin', 'Org2MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org2MSP.admin')"
+    - &Org3_Recruiter
+        Name: Org3MSP
+        ID: Org3MSP
+        MSPDir: crypto-config/peerOrganizations/RecruiterOrg.com/msp/
+        AnchorPeers:
+            - Host: peer0.org3.recruiter
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org3MSP.admin', 'Org3MSP.peer', 'Org3MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org3MSP.admin', 'Org3MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org3MSP.admin')"
+    - &Org4_HealthChecker
+        Name: Org4MSP
+        ID: Org4MSP
+        MSPDir: crypto-config/peerOrganizations/CheckerOrg.com/msp/
+        AnchorPeers:
+            - Host: peer0.org4.healthchecker
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org4MSP.admin', 'Org4MSP.peer', 'Org4MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org4MSP.admin', 'Org4MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org4MSP.admin')"
+    - &Org5_Person
+        Name: Org5MSP
+        ID: Org5MSP
+        MSPDir: crypto-config/peerOrganizations/PersonOrg.com/msp/
+        AnchorPeers:
+            - Host: peer0.org5.publisher
+              Port: 7051
+        Policies:
+            Readers:
+                Type: Signature
+                Rule: "OR('Org5MSP.admin', 'Org5MSP.peer', 'Org5MSP.client')"
+            Writers:
+                Type: Signature
+                Rule: "OR('Org5MSP.admin', 'Org5MSP.client')"
+            Admins:
+                Type: Signature
+                Rule: "OR('Org5MSP.admin')"
+Capabilities:
+    Channel: &ChannelCapabilities
+        V1_3: true
+
+    Orderer: &OrdererCapabilities
+        V1_1: true
+
+    Application: &ApplicationCapabilities
+        V1_3: true
+        V1_2: false
+        V1_1: false
+Application: &ApplicationDefaults
+
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+
+Orderer: &OrdererDefaults
+
+    OrdererType: solo
+    Addresses:
+        - orderer:7050
+    BatchTimeout: 2s
+    BatchSize:
+        MaxMessageCount: 10
+        AbsoluteMaxBytes: 99 MB
+        PreferredMaxBytes: 512 KB
+    Kafka:
+        Brokers:
+            #            - kafka-zookeeper:9092
+            - 127.0.0.1:9092
+    Organizations:
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+        BlockValidation:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"    
+    
+Channel: &ChannelDefaults
+    Policies:
+        Readers:
+            Type: ImplicitMeta
+            Rule: "ANY Readers"
+        Writers:
+            Type: ImplicitMeta
+            Rule: "ANY Writers"
+        Admins:
+            Type: ImplicitMeta
+            Rule: "MAJORITY Admins"
+
+    Capabilities:
+        <<: *ChannelCapabilities
+
+Profiles:
+
+    FiveOrgOrdererGenesis:
+        <<: *ChannelDefaults
+        Orderer:
+            <<: *OrdererDefaults
+            Organizations:
+                - *OrdererOrg
+            Capabilities:
+                <<: *OrdererCapabilities
+        Consortiums:
+            Consortium1:
+                Organizations:
+                    - *Org4_HealthChecker
+                    - *Org5_Person
+            Consortium2:
+                Organizations:
+                    - *Org1_Publisher
+                    - *Org2_CrimeChecker
+                    - *Org3_Recruiter
+                    - *Org4_HealthChecker
+                    - *Org5_Person
+            Consortium3:
+                Organizations:
+                    - *Org2_CrimeChecker
+                    - *Org3_Recruiter
+                    - *Org5_Person
+    Channel1_HealthCertificate:
+        Consortium: Consortium1
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org4_HealthChecker
+                - *Org5_Person
+            Capabilities:
+                <<: *ApplicationCapabilities
+    Channel2_LicenseCertificate:
+        Consortium: Consortium2
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org1_Publisher
+                - *Org2_CrimeChecker
+                - *Org3_Recruiter
+                - *Org4_HealthChecker
+                - *Org5_Person
+            Capabilities:
+                <<: *ApplicationCapabilities
+    Channel3_AccidentCertificate:
+        Consortium: Consortium3
+        Application:
+            <<: *ApplicationDefaults
+            Organizations:
+                - *Org2_CrimeChecker
+                - *Org3_Recruiter
+                - *Org5_Person
+            Capabilities:
+                <<: *ApplicationCapabilities
+

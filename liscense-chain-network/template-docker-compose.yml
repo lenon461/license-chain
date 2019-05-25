@@ -1,0 +1,498 @@
+#
+# Copyright IBM Corp All Rights Reserved
+#
+# SPDX-License-Identifier: Apache-2.0
+#
+version: '2'
+
+networks:
+  license-chain:
+
+services:
+  ca1.publisher:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-publisher
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+        #- FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/fae52fe51b8cc37ea9fbe8686a42cd3d8a484691c445bde72e29511b64f13aa9_sk
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.PublisherOrg.com-cert.pem
+    ports:
+      - "7054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.PublisherOrg.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/PublisherOrg.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca1.publisher
+    networks:
+      - license-chain
+  ca2.crimechecker:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-crimechecker
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.CheckerOrg.com-cert.pem
+    ports:
+      - "8054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.CheckerOrg.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/CheckerOrg.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca2.crimechecker
+    networks:
+      - license-chain
+  ca3.recruiter:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-recruiter
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.RecruiterOrg.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY
+    ports:
+      - "9054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.RecruiterOrg.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA3_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/RecruiterOrg.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca3.recruiter
+    networks:
+      - license-chain
+  ca4.healthchecker:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-healthchecker
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.HealthCheckerOrg.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA4_PRIVATE_KEY
+    ports:
+      - "10054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.HealthCheckerOrg.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA4_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/HealthCheckerOrg.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca4.healthchecker
+    networks:
+      - license-chain
+  ca5.person:
+    image: hyperledger/fabric-ca
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-person
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_CA_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.PersonOrg.com-cert.pem
+      - FABRIC_CA_SERVER_CA_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA5_PRIVATE_KEY
+    ports:
+      - "11054:7054"
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.PersonOrg.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA5_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - ./crypto-config/peerOrganizations/PersonOrg.com/ca/:/etc/hyperledger/fabric-ca-server-config
+    container_name: ca5.person
+    networks:
+      - license-chain
+
+  orderer:
+    container_name: orderer
+    image: hyperledger/fabric-orderer
+    environment:
+        # 로그 메시지 표시 수준 설정 (info, debug)
+      - ORDERER_GENERAL_LOGLEVEL=INFO 
+
+        # orderer의 주소값
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0 
+        
+        # genesis block을 지정하는 방법을 나타내는 값 (file, provisional)
+        # file : ORDERER_GENESISFILE=<genesis.block>경로
+        # provisonal : ORDERER_GENERAL_GENESISPROFILE=<genesis.block>생성
+      - ORDERER_GENERAL_GENESISMETHOD=file 
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+        
+        # orderer의 local msp id 와 경로
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+        # enabled TLS
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+
+        # 블록을 생성하기까지 트랜잭션을 수신하는 최대 시간
+        # 트랜잭션을 정렬하는 방식 선택
+        # 카프카 Broker노드의 주소
+        #      - CONFIGTX_ORDERER_BATCHTIMEOUT=1s
+        #- CONFIGTX_ORDERER_ORDERERTYPE=kafka=1s
+        #- CONFIGTX_ORDERER_KAFKA_BROKERS=[kafka-zookeeper:9092]
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/orderer
+    command: orderer
+    ports:
+      - 7050:7050
+    volumes:
+        - ./config/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ./crypto-config/ordererOrganizations/mainorderer.com/orderers/orderer.mainorderer.com/msp/:/var/hyperledger/orderer/msp
+        - ./crypto-config/ordererOrganizations/mainorderer.com/orderers/orderer.mainorderer.com/tls/:/var/hyperledger/orderer/tls
+          #  - orderer:/var/hyperledger/production/orderer
+    networks:
+      - license-chain
+
+  peer0.org1.publisher:
+    container_name: peer0.org1.publisher
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_license-chain
+      - FABRIC_LOGGING_SPEC=info
+      - CORE_CHAINCODE_LOGGING_LEVEL=info
+
+        # peer 의 주소값, id, local msp id, msp path
+      - CORE_PEER_ADDRESS=peer0.org1.publisher:7051
+      - CORE_PEER_ID=peer0.org1.publisher
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+
+        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.publisher:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.publisher:7051
+
+
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    # command: peer node start --peer-chaincodedev=true
+    ports:
+      - "7051:7051"
+      - "7053:7053"
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/PublisherOrg.com/peers/peer0.PublisherOrg.com/msp/:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/PublisherOrg.com/peers/peer0.PublisherOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./config:/etc/hyperledger/configtx
+          #    - peer0.org1.publisher:/var/hyperledger/production
+    depends_on:
+      - orderer
+      - couchdb1
+    networks:
+      - license-chain
+
+  peer0.org2.crimechecker:
+    container_name: peer0.org2.crimechecker
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_license-chain
+      - FABRIC_LOGGING_SPEC=info
+      - CORE_CHAINCODE_LOGGING_LEVEL=info
+
+        # peer 의 주소값, id, local msp id, msp path
+      - CORE_PEER_ADDRESS=peer0.org2.crimechecker:7051
+      - CORE_PEER_ID=peer0.org2.crimechecker
+      - CORE_PEER_LOCALMSPID=Org2MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+
+        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    # command: peer node start --peer-chaincodedev=true
+    ports:
+      - 8051:7051
+      - 8053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/CheckerOrg.com/peers/peer0.CheckerOrg.com/msp/:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/CheckerOrg.com/peers/peer0.CheckerOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./config:/etc/hyperledger/configtx
+          #    - peer0.org2.crimechecker:/var/hyperledger/production
+    depends_on:
+      - orderer
+      - couchdb2
+    networks:
+      - license-chain
+  peer0.org3.recruiter:
+    container_name: peer0.org3.recruiter
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_license-chain
+      - FABRIC_LOGGING_SPEC=info
+      - CORE_CHAINCODE_LOGGING_LEVEL=info
+
+        # peer 의 주소값, id, local msp id, msp path
+      - CORE_PEER_ADDRESS=peer0.org3.recruiter:7051
+      - CORE_PEER_ID=peer0.org3.recruiter
+      - CORE_PEER_LOCALMSPID=Org3MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+
+        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    # command: peer node start --peer-chaincodedev=true
+    ports:
+      - 9051:7051
+      - 9053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/RecruiterOrg.com/peers/peer0.RecruiterOrg.com/msp/:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/RecruiterOrg.com/peers/peer0.RecruiterOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./config:/etc/hyperledger/configtx
+          #        - peer0.org3.recruiter:/var/hyperledger/production
+    depends_on:
+      - orderer
+      - couchdb3
+    networks:
+      - license-chain
+  peer0.org4.healthchecker:
+    container_name: peer0.org4.healthchecker
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_license-chain
+      - FABRIC_LOGGING_SPEC=info
+      - CORE_CHAINCODE_LOGGING_LEVEL=info
+
+        # peer 의 주소값, id, local msp id, msp path
+      - CORE_PEER_ADDRESS=peer0.org4.healthchecker:7051
+      - CORE_PEER_ID=peer0.org4.healthchecker
+      - CORE_PEER_LOCALMSPID=Org4MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+
+        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb4:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    # command: peer node start --peer-chaincodedev=true
+    ports:
+      - "10051:7051"
+      - "10053:7053"
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/HealthCheckerOrg.com/peers/peer0.HealthCheckerOrg.com/msp/:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/HealthCheckerOrg.com/peers/peer0.HealthCheckerOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./config:/etc/hyperledger/configtx
+          #        - peer0.org4.healthchecker:/var/hyperledger/production
+    depends_on:
+      - orderer
+      - couchdb4
+    networks:
+      - license-chain
+  peer0.org5.person:
+    container_name: peer0.org5.person
+    image: hyperledger/fabric-peer
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_license-chain
+      - FABRIC_LOGGING_SPEC=info
+      - CORE_CHAINCODE_LOGGING_LEVEL=info
+
+        # peer 의 주소값, id, local msp id, msp path
+      - CORE_PEER_ADDRESS=peer0.org5.person:7051
+      - CORE_PEER_ID=peer0.org5.person
+      - CORE_PEER_LOCALMSPID=Org5MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
+
+        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org5.person:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org5.person:7051
+
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb5:5984
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_USERNAME=
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_PASSWORD=
+
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    # command: peer node start --peer-chaincodedev=true
+    ports:
+      - 11051:7051
+      - 11053:7053
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./crypto-config/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/msp/:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./config:/etc/hyperledger/configtx
+          #        - peer0.org5.person:/var/hyperledger/production
+    depends_on:
+      - orderer
+      - couchdb5
+    networks:
+      - license-chain
+
+  couchdb1:
+    container_name: couchdb1
+    image: hyperledger/fabric-couchdb
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 5984:5984
+    networks:
+      - license-chain
+  couchdb2:
+    container_name: couchdb2
+    image: hyperledger/fabric-couchdb
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 6984:5984
+    networks:
+      - license-chain
+  couchdb3:
+    container_name: couchdb3
+    image: hyperledger/fabric-couchdb
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 7984:5984
+    networks:
+      - license-chain
+  couchdb4:
+    container_name: couchdb4
+    image: hyperledger/fabric-couchdb
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 8984:5984
+    networks:
+      - license-chain
+  couchdb5:
+    container_name: couchdb5
+    image: hyperledger/fabric-couchdb
+    # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
+    # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
+    environment:
+      - COUCHDB_USER=
+      - COUCHDB_PASSWORD=
+    ports:
+      - 9984:5984
+    networks:
+      - license-chain
+
+  cli:
+    container_name: cli
+    image: hyperledger/fabric-tools
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - FABRIC_LOGGING_SPEC=info
+      - CORE_PEER_ID=peer0.org5.person
+      - CORE_PEER_ADDRESS=peer0.org5.person:7051
+      - CORE_PEER_LOCALMSPID=Org5MSP
+
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/msp
+
+      - CORE_PEER_TLS_CLIENTAUTHREQUIRED=true
+      - CORE_PEER_TLS_CLIENTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/client.crt
+      - CORE_PEER_TLS_CLIENTROOTCAS_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/ca.crt
+      - CORE_PEER_TLS_CLIENTKEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/PersonOrg.com/users/Admin@PersonOrg.com/tls/client.key
+        # - CORE_CHAINCODE_KEEPALIVE=10
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: /bin/bash
+    volumes:
+        - /var/run/:/host/var/run/
+        - ./chaincode/:/opt/gopath/src/github.com/chaincode
+        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - ./config:/opt/gopath/src/github.com/hyperledger/fabric/peer/config
+    networks:
+        - license-chain
+          #depends_on:
+          
+  #zookeeper:
+  #  image: hyperledger/fabric-zookeeper
+  #  # restart: always
+  #  ports:
+  #    - 2181:2181
+  #
+ ##  kafka0:
+ #    image: hyperledger/fabric-kafka
+ #    # restart: always
+ #    environment:
+ #      - KAFKA_ADVERTISED_HOST_NAME=10.0.1.32
+ #      - KAFKA_ADVERTISED_PORT=9092
+ #      - KAFKA_BROKER_ID=0
+ #      - KAFKA_MESSAGE_MAX_BYTES=103809024 # 99 * 1024 * 1024 B
+ #      - KAFKA_REPLICA_FETCH_MAX_BYTES=103809024
+ #      - KAFKA_UNCLEAN_LEADER_ELECTION_ENABLE=false
+ #      - KAFKA_NUM_REPLICA_FETCHERS=1
+ #      - KAFKA_DEFAULT_REPLICATION_FACTOR=1
+ #      - KAFKA_ZOOKEEPER_CONNECT=zookeeper:2181
+ #    ports:
+ #      - 9092:9092
+ #    depends_on:
+ #      - zookeeper
+ #    networks:
+ #      - license-chain
+
+
