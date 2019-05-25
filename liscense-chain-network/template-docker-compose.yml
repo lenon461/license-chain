@@ -110,11 +110,11 @@ services:
         # orderer의 local msp id 와 경로
       - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
       - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
-        # enabled TLS
-      - ORDERER_GENERAL_TLS_ENABLED=true
-      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+ #        # enabled TLS
+ #      - ORDERER_GENERAL_TLS_ENABLED=true
+ #      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+ #      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+ #      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
 
         # 블록을 생성하기까지 트랜잭션을 수신하는 최대 시간
         # 트랜잭션을 정렬하는 방식 선택
@@ -150,18 +150,17 @@ services:
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
 
         # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+ #      - CORE_PEER_TLS_ENABLED=true
+ #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+ #      - CORE_PEER_GOSSIP_ORGLEADER=false
+ #
+ #      - CORE_PEER_PROFILE_ENABLED=true
+ #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+ #      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+ #      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
 
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org1.publisher:7051
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org1.publisher:7051
-
 
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
@@ -177,6 +176,7 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/PublisherOrg.com/peers/peer0.PublisherOrg.com/msp/:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/PublisherOrg.com/peers/peer0.PublisherOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/PublisherOrg.com/users/:/etc/hyperledger/user/
         - ./config:/etc/hyperledger/configtx
           #    - peer0.org1.publisher:/var/hyperledger/production
     depends_on:
@@ -200,15 +200,15 @@ services:
       - CORE_PEER_LOCALMSPID=Org2MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
 
-        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+ #        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+ #      - CORE_PEER_TLS_ENABLED=true
+ #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+ #      - CORE_PEER_GOSSIP_ORGLEADER=false
+ #
+ #      - CORE_PEER_PROFILE_ENABLED=true
+ #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+ #      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+ #      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
 
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
@@ -224,6 +224,7 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/CheckerOrg.com/peers/peer0.CheckerOrg.com/msp/:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/CheckerOrg.com/peers/peer0.CheckerOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/CheckerOrg.com/users/:/etc/hyperledger/user/
         - ./config:/etc/hyperledger/configtx
           #    - peer0.org2.crimechecker:/var/hyperledger/production
     depends_on:
@@ -246,15 +247,15 @@ services:
       - CORE_PEER_LOCALMSPID=Org3MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
 
-        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+ #        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+ #      - CORE_PEER_TLS_ENABLED=true
+ #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+ #      - CORE_PEER_GOSSIP_ORGLEADER=false
+ #
+ #      - CORE_PEER_PROFILE_ENABLED=true
+ #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+ #      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+ #      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
 
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
@@ -270,6 +271,7 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/RecruiterOrg.com/peers/peer0.RecruiterOrg.com/msp/:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/RecruiterOrg.com/peers/peer0.RecruiterOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/RecruiterOrg.com/users/:/etc/hyperledger/user/
         - ./config:/etc/hyperledger/configtx
           #        - peer0.org3.recruiter:/var/hyperledger/production
     depends_on:
@@ -292,15 +294,15 @@ services:
       - CORE_PEER_LOCALMSPID=Org4MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
 
-        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+ #        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+ #      - CORE_PEER_TLS_ENABLED=true
+ #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+ #      - CORE_PEER_GOSSIP_ORGLEADER=false
+ #
+ #      - CORE_PEER_PROFILE_ENABLED=true
+ #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+ #      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+ #      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
 
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb4:5984
@@ -316,6 +318,7 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/HealthCheckerOrg.com/peers/peer0.HealthCheckerOrg.com/msp/:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/HealthCheckerOrg.com/peers/peer0.HealthCheckerOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/HealthCheckerOrg.com/users/:/etc/hyperledger/user/
         - ./config:/etc/hyperledger/configtx
           #        - peer0.org4.healthchecker:/var/hyperledger/production
     depends_on:
@@ -338,18 +341,18 @@ services:
       - CORE_PEER_LOCALMSPID=Org5MSP
       - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/msp
 
-        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
+ #        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
+ #      - CORE_PEER_TLS_ENABLED=true
+ #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+ #      - CORE_PEER_GOSSIP_ORGLEADER=false
+ #
+ #      - CORE_PEER_PROFILE_ENABLED=true
+ #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+ #      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+ #      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
 
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
-
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org5.person:7051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org5.person:7051
+ #      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org5.person:7051
+ #      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org5.person:7051
 
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb5:5984
@@ -366,6 +369,7 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/msp/:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/PersonOrg.com/users/:/etc/hyperledger/user/
         - ./config:/etc/hyperledger/configtx
           #        - peer0.org5.person:/var/hyperledger/production
     depends_on:
