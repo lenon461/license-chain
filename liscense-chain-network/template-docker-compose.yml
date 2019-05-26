@@ -151,8 +151,8 @@ services:
 
         # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
  #      - CORE_PEER_TLS_ENABLED=true
- #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
- #      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
  #
  #      - CORE_PEER_PROFILE_ENABLED=true
  #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
@@ -202,8 +202,8 @@ services:
 
  #        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
  #      - CORE_PEER_TLS_ENABLED=true
- #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
- #      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
  #
  #      - CORE_PEER_PROFILE_ENABLED=true
  #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
@@ -249,8 +249,8 @@ services:
 
  #        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
  #      - CORE_PEER_TLS_ENABLED=true
- #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
- #      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
  #
  #      - CORE_PEER_PROFILE_ENABLED=true
  #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
@@ -296,8 +296,8 @@ services:
 
  #        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
  #      - CORE_PEER_TLS_ENABLED=true
- #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
- #      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
  #
  #      - CORE_PEER_PROFILE_ENABLED=true
  #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
@@ -343,8 +343,8 @@ services:
 
  #        # enabled tls, 리더선출방법자동, 수동일경우 해당 피어 리더여부
  #      - CORE_PEER_TLS_ENABLED=true
- #      - CORE_PEER_GOSSIP_USELEADERELECTION=true
- #      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
  #
  #      - CORE_PEER_PROFILE_ENABLED=true
  #      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
@@ -369,7 +369,6 @@ services:
         - /var/run/:/host/var/run/
         - ./crypto-config/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/msp/:/etc/hyperledger/fabric/msp
         - ./crypto-config/peerOrganizations/PersonOrg.com/peers/peer0.PersonOrg.com/tls/:/etc/hyperledger/fabric/tls
-        - ./crypto-config/peerOrganizations/PersonOrg.com/users/:/etc/hyperledger/user/
         - ./config:/etc/hyperledger/configtx
           #        - peer0.org5.person:/var/hyperledger/production
     depends_on:
