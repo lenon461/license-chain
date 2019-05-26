@@ -88,7 +88,7 @@ Organizations:
         ID: Org5MSP
         MSPDir: crypto-config/peerOrganizations/PersonOrg.com/msp/
         AnchorPeers:
-            - Host: peer0.org5.publisher
+            - Host: peer0.org5.person
               Port: 7051
         Policies:
             Readers:

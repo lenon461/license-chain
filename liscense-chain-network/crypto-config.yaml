@@ -3,16 +3,12 @@ OrdererOrgs:
     Domain: mainorderer.com
     Specs:
       - Hostname: orderer
-        SANS:
-          - "localhost"
 PeerOrgs:
   - Name: Org1_Publisher
     Domain: PublisherOrg.com
     EnableNodeOUs: true
     Template:
       Count: 1
-      SANS:
-          - "localhost"
     Users:
       Count: 1
 
@@ -21,8 +17,6 @@ PeerOrgs:
     EnableNodeOUs: true
     Template:
       Count: 1
-      SANS:
-          - "localhost"
     Users:
       Count: 1
 
@@ -31,8 +25,6 @@ PeerOrgs:
     EnableNodeOUs: true
     Template:
       Count: 1
-      SANS:
-          - "localhost"
     Users:
       Count: 1
 
@@ -41,8 +33,6 @@ PeerOrgs:
     EnableNodeOUs: true
     Template:
       Count: 1
-      SANS:
-          - "localhost"
     Users:
       Count: 1
 
@@ -51,7 +41,5 @@ PeerOrgs:
     EnableNodeOUs: true
     Template:
       Count: 1
-      SANS:
-          - "localhost"
     Users:
       Count: 1
