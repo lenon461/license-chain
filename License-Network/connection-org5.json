@@ -1,0 +1,48 @@
+{
+  "name": "License-network-org5",
+  "version": "1.0.0",
+  "client": {
+    "organization": "Org5",
+    "connection": {
+      "timeout": {
+        "peer": {
+          "endorser": "300"
+        }
+      }
+    }
+  },
+  "organizations": {
+    "Org5": {
+      "mspid": "Org5MSP",
+      "peers": [
+        "peer0.org5.example.com"
+      ],
+      "certificateAuthorities": [
+        "ca_peerOrg5"
+      ]
+    }
+  },
+  "peers": {
+    "peer0.org5.example.com": {
+      "url": "grpcs://localhost:11051",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/org5.example.com/tlsca/tlsca.org5.example.com-cert.pem"
+      },
+      "grpcOptions": {
+        "ssl-target-name-override": "peer0.org5.example.com"
+      }
+    }
+  },
+  "certificateAuthorities": {
+    "ca_peerOrg5": {
+      "url": "https://localhost:11054",
+      "caName": "ca-org5",
+      "tlsCACerts": {
+        "path": "crypto-config/peerOrganizations/org5.example.com/tlsca/tlsca.org5.example.com-cert.pem"
+      },
+      "httpOptions": {
+        "verify": false
+      }
+    }
+  }
+}

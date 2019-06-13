@@ -122,10 +122,12 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org5.example.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org5.example.com:7051
       - CORE_PEER_LOCALMSPID=Org5MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/users/Admin@org5.example.com/msp
     volumes:
       - /var/run/:/host/var/run/
       - ../crypto-config/peerOrganizations/org5.example.com/peers/peer0.org5.example.com/msp:/etc/hyperledger/fabric/msp
       - ../crypto-config/peerOrganizations/org5.example.com/peers/peer0.org5.example.com/tls:/etc/hyperledger/fabric/tls
+      - ../crypto-config/peerOrganizations/org5.example.com/users:/etc/hyperledger/fabric/users/
       - peer0.org5.example.com:/var/hyperledger/production
     ports:
       - 11051:7051
