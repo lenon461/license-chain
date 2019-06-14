@@ -103,10 +103,12 @@ services:
       - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.org4.example.com:7051
       - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.org4.example.com:7051
       - CORE_PEER_LOCALMSPID=Org4MSP
+      - CORE_PEER_MSPCONFIGPATH=/etc/hyperledger/fabric/users/Admin@org4.example.com/msp
     volumes:
       - /var/run/:/host/var/run/
       - ../crypto-config/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/msp:/etc/hyperledger/fabric/msp
       - ../crypto-config/peerOrganizations/org4.example.com/peers/peer0.org4.example.com/tls:/etc/hyperledger/fabric/tls
+      - ../crypto-config/peerOrganizations/org4.example.com/users:/etc/hyperledger/fabric/users/
       - peer0.org4.example.com:/var/hyperledger/production
     ports:
       - 10051:7051
