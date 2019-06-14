@@ -1,4 +1,3 @@
----
 name: License-network-org5
 version: 1.0.0
 client:
@@ -24,7 +23,7 @@ peers:
 certificateAuthorities:
   ca_peerOrg5:
     url: https://localhost:11054
-    caName: ca_peerOrg5
+    caName:  ca-org5
     tlsCACerts:
       path: crypto-config/peerOrganizations/org5.example.com/tlsca/tlsca.org5.example.com-cert.pem
     httpOptions:
