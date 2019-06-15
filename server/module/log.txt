@@ -1,0 +1,100 @@
+Wallet path: /home/hyper/cry/license-chain/server/module/wallet
+Network {
+  gateway: 
+   Gateway {
+     client: 
+      Client {
+        _cryptoSuite: [Object],
+        _clientConfigMspid: 'Org5MSP',
+        _stateStore: [Object],
+        _userContext: [Object],
+        _network_config: [Object],
+        _msps: Map {},
+        _devMode: false,
+        _adminSigningIdentity: null,
+        _tls_mutual: {},
+        _organizations: Map {},
+        _certificateAuthorities: Map {},
+        _channels: [Object],
+        _connection_options: {} },
+     wallet: null,
+     networks: Map { 'channel1' => [Circular] },
+     options: 
+      { queryHandlerOptions: [Object],
+        eventHandlerOptions: [Object],
+        discovery: [Object],
+        checkpointer: [Object],
+        eventHubSelectionOptions: [Object],
+        wallet: [Object],
+        identity: 'user1' },
+     currentIdentity: 
+      User {
+        _name: 'user1',
+        _roles: null,
+        _affiliation: '',
+        _enrollmentSecret: '',
+        _identity: [Object],
+        _signingIdentity: [Object],
+        _mspId: 'Org5MSP',
+        _cryptoSuite: [Object] } },
+  channel: 
+   Channel {
+     _name: 'channel1',
+     _channel_peers: Map { 'peer0.org5.example.com' => [Object] },
+     _anchor_peers: undefined,
+     _orderers: Map { 'orderer.example.com' => [Object] },
+     _kafka_brokers: [],
+     _clientContext: 
+      Client {
+        _cryptoSuite: [Object],
+        _clientConfigMspid: 'Org5MSP',
+        _stateStore: [Object],
+        _userContext: [Object],
+        _network_config: [Object],
+        _msps: Map {},
+        _devMode: false,
+        _adminSigningIdentity: null,
+        _tls_mutual: {},
+        _organizations: Map {},
+        _certificateAuthorities: Map {},
+        _channels: [Object],
+        _connection_options: {} },
+     _msp_manager: MSPManager { _msps: [Object] },
+     _discovery_interests: Map {},
+     _discovery_results: null,
+     _last_discover_timestamp: null,
+     _use_discovery: false,
+     _as_localhost: true,
+     _endorsement_handler: DiscoveryEndorsementHandler { _channel: [Circular] },
+     _commit_handler: BasicCommitHandler { _channel: [Circular] },
+     _last_refresh_request: { target: [Object], discover: false, asLocalhost: true } },
+  contracts: Map {},
+  initialized: true,
+  listeners: Map {},
+  queryHandler: SingleQueryHandler { _peers: [ [Object] ], _startPeerIndex: 0 },
+  checkpointer: { factory: [Function: FILE_SYSTEM_CHECKPOINTER], options: {} },
+  eventHubSelectionStrategy: RoundRobinEventHubSelectionStrategy { peers: [ [Object] ], lastPeerIdx: null },
+  eventHubManager: 
+   EventHubManager {
+     channel: 
+      Channel {
+        _name: 'channel1',
+        _channel_peers: [Object],
+        _anchor_peers: undefined,
+        _orderers: [Object],
+        _kafka_brokers: [],
+        _clientContext: [Object],
+        _msp_manager: [Object],
+        _discovery_interests: Map {},
+        _discovery_results: null,
+        _last_discover_timestamp: null,
+        _use_discovery: false,
+        _as_localhost: true,
+        _endorsement_handler: [Object],
+        _commit_handler: [Object],
+        _last_refresh_request: [Object] },
+     eventHubFactory: EventHubFactory { _channel: [Object], _savedEventHubs: Map {} },
+     eventHubSelectionStrategy: RoundRobinEventHubSelectionStrategy { peers: [Array], lastPeerIdx: null },
+     newEventHubs: [] } }
+2019-06-15T15:05:21.899Z - [33mwarn[39m: [TransactionEventHandler]: _strategyFail: strategy fail for transaction "267262bfd7d05469dc522b4a5539f3c38f4313d0d4f4a98f532cdd6f20b4c6a3": Error: Peer localhost:11051 has rejected transaction "267262bfd7d05469dc522b4a5539f3c38f4313d0d4f4a98f532cdd6f20b4c6a3" with code "ENDORSEMENT_POLICY_FAILURE"
+Failed to evaluate transaction: Error: Peer localhost:11051 has rejected transaction "267262bfd7d05469dc522b4a5539f3c38f4313d0d4f4a98f532cdd6f20b4c6a3" with code "ENDORSEMENT_POLICY_FAILURE"

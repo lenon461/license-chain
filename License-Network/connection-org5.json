@@ -24,7 +24,7 @@
   },
   "channels":{
     "channel1": {
-        "orderers" : "orderer.example.com",
+        "orderers" : ["orderer.example.com"],
         "peers" : {
             "peer0.org5.example.com" : {
                 "endorsingPeer": "true",
@@ -37,7 +37,7 @@
   },
   "orderers":{
     "orderer.example.com":{
-      "url":"grpc://localhost:7050",
+      "url":"grpcs://localhost:7050",
       "tlsCACerts": {
         "path": "/home/hyper/cry/license-chain/License-Network/crypto-config/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem"
       },
