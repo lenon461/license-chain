@@ -1,5 +1,5 @@
 {
-  "name": "License-network-org5",
+  "name": "Lic-network-org5",
   "version": "1.0.0",
   "client": {
     "organization": "Org5",
@@ -22,11 +22,35 @@
       ]
     }
   },
+  "channels":{
+    "channel1": {
+        "orderers" : "orderer.example.com",
+        "peers" : {
+            "peer0.org5.example.com" : {
+                "endorsingPeer": "true",
+                "chaincodeQuery": "true",
+                "ledgerQuery": "true",
+                "eventSource": "true"
+            }
+        }
+    }
+  },
+  "orderers":{
+    "orderer.example.com":{
+      "url":"grpc://localhost:7050",
+      "tlsCACerts": {
+        "path": "/home/hyper/cry/license-chain/License-Network/crypto-config/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem"
+      },
+      "grpcOptions":{
+        "ssl-target-name-override": "orderer.example.com"
+      }
+    }
+  },
   "peers": {
     "peer0.org5.example.com": {
       "url": "grpcs://localhost:11051",
       "tlsCACerts": {
-        "path": "crypto-config/peerOrganizations/org5.example.com/tlsca/tlsca.org5.example.com-cert.pem"
+        "path": "/home/hyper/cry/license-chain/License-Network/crypto-config/peerOrganizations/org5.example.com/tlsca/tlsca.org5.example.com-cert.pem"
       },
       "grpcOptions": {
         "ssl-target-name-override": "peer0.org5.example.com"
@@ -38,7 +62,7 @@
       "url": "https://localhost:11054",
       "caName": "ca-org5",
       "tlsCACerts": {
-        "path": "crypto-config/peerOrganizations/org5.example.com/tlsca/tlsca.org5.example.com-cert.pem"
+        "path": "/home/hyper/cry/license-chain/License-Network/crypto-config/peerOrganizations/org5.example.com/tlsca/tlsca.org5.example.com-cert.pem"
       },
       "httpOptions": {
         "verify": false
@@ -46,3 +70,4 @@
     }
   }
 }
+

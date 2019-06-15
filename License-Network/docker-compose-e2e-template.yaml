@@ -3,8 +3,10 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-version: "2"
+version: "2.0"
 
+networks:
+  byfn:
 volumes:
   orderer.example.com:
   peer0.org1.example.com:
@@ -13,8 +15,6 @@ volumes:
   peer0.org4.example.com:
   peer0.org5.example.com:
 
-networks:
-  byfn:
 services:
   couchdb0:
     container_name: couchdb0
