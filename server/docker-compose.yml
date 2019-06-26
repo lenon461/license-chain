@@ -1,0 +1,38 @@
+version: '2.0'
+
+services:
+ #   db:
+ #    image: postgres:9.6.1
+ #    volumes:
+ #      - ./docker/data:/var/lib/postgresql/data
+ #    environment:
+ #      - POSTGRES_DB=sampledb
+ #      - POSTGRES_USER=sampleuser
+ #      - POSTGRES_PASSWORD=samplesecret
+ #      - POSTGRES_INITDB_ARGS=--encoding=UTF-8
+ #    healthcheck:
+ #      test: "pg_isready -h localhost -p 5432 -q -U postgres"
+ #      interval: 3s
+ #      timeout: 1s
+ #     retries: 10
+
+  express-server:
+    stdin_open: true
+    container_name: express-server
+    image: node:carbon
+ #   build:
+ #     context: .
+ #     dockerfile: ./docker/Dockerfile-dev
+    environment:
+      - TEST_TEST=True
+    ports:
+      - 3001:3000
+    working_dir: /app/
+    volumes:
+      - ./:/app/
+ #    depends_on:
+ #      db:
+ #        condition: service_healthy
+ #   links:
+ #     - db
+    command: node app.js
